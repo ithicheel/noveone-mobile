@@ -1,6 +1,7 @@
-import { StyleSheet, Text, View, ScrollView, Image } from "react-native";
+import { StyleSheet, Text, View, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
 import axios from "../../axios";
+import SimularNovelItem from "./SimularNovelItem";
 
 const SimularNovel = (props) => {
   const [simularNovel, setSimularNovel] = useState([]);
@@ -11,19 +12,14 @@ const SimularNovel = (props) => {
         }
     })
   }, [])
+
   return (
     <View>
       <Text style={{ marginTop: 50 }}>Simular Novels</Text>
       <ScrollView style={{ marginVertical: 20 }} horizontal={true}>
         {simularNovel.map((el, ind) => {
           return (
-            <View key={ind} style={{ marginRight: 20 }}>
-              <Image
-                style={{ width: 100, height: 140, borderRadius: 15 }}
-                source={{ uri: `data:image/jpeg;base64,${el.image}` }}
-              />
-              <Text style={{ width: 100 }}>{el.name}</Text>
-            </View>
+            <SimularNovelItem data={el} ind={ind}/>
           );
         })}
       </ScrollView>

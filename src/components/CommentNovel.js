@@ -1,13 +1,67 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import axios from "../../axios";
 
-import like from "../images/like.png";
 import { TextInput } from "react-native-gesture-handler";
-import commentImage from "../images/comment.png";
+import { getToken } from "../Auth/AuthToken";
+import CommentNovelItem from "./CommentNovelItem";
+
+const getDate = () => {
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  let mm = today.getMonth() + 1; // Months start at 0!
+  let dd = today.getDate();
+  return yyyy + "-" + mm + "-" + dd;
+}
+
 const CommentNovel = (props) => {
   const [comment, setComment] = useState([]);
+  const [sendCommendData, setSendCommentData] = useState("");
+  const [userId, setUserId] = useState("");
+  const [username, setUsername] = useState("");
+  const sendCommend = () => {
+    console.log(sendCommendData);
+    let send = {
+      id: 0,
+      novelId: props.id,
+      userId,
+      parentId: "",
+      dated: getDate(),
+      liked: 0,
+      comment: sendCommendData
+    }
+    if(sendCommendData.length > 1){
+      console.log("sdf");
+      axios
+      .post("/comment", send)
+      .then((result) => {
+        if (result.data) {
+          console.log(result.data.data);
+          setSendCommentData("");
+          let comments = [...comment];
+          send.username = username;
+          comments.push(send);
+          setComment(comments);
+          
+        }
+      })
+      .catch((error) => console.log(error));
+    }
+  }
   useEffect(() => {
+    getToken()
+    .then((result) => {
+      if (result !== null || result !== "none") {
+        const obj = JSON.parse(result);
+        setUserId(obj.data.id);
+        setUsername(obj.data.username);
+      } else {
+        console.log("first")
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
     axios
       .get("/comment/novel/" + props.id)
       .then((result) => {
@@ -26,61 +80,7 @@ const CommentNovel = (props) => {
         {comment.map((el, ind) => {
           // let countParentId;
           return (
-            <View key={ind} style={{ marginBottom: 20 }}>
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Text
-                  style={{
-                    width: 30,
-                    height: 30,
-                    backgroundColor: "#712ACB",
-                    borderRadius: 40,
-                    marginRight: 5,
-                  }}
-                ></Text>
-                <Text>Dodobest</Text>
-              </View>
-              <View>
-                <Text style={{ marginLeft: 35, marginVertical: 6 }}>
-                  {el.comment}
-                </Text>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "flex-end",
-                  }}
-                >
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      marginRight: 10,
-                    }}
-                  >
-                    <Image
-                      style={{
-                        width: 20,
-                        height: 20,
-                        marginRight: 5,
-                      }}
-                      source={like}
-                    />
-                    <Text>{el.liked}</Text>
-                  </View>
-                  <View style={{ flexDirection: "row", alignItems: "center" }}>
-                    <Image
-                      style={{
-                        width: 20,
-                        height: 20,
-                        marginRight: 5,
-                      }}
-                      source={commentImage}
-                    />
-                    <Text>{el.parentId}</Text>
-                  </View>
-                </View>
-              </View>
-            </View>
+            <CommentNovelItem data={el} ind={ind} />
           );
         })}
         {/* Send */}
@@ -103,6 +103,9 @@ const CommentNovel = (props) => {
               width: "70%",
               marginRight: 10,
             }}
+            value={sendCommendData}
+            onChangeText={(e) => setSendCommentData(e)}
+
           />
           <TouchableOpacity
             style={{
@@ -111,6 +114,7 @@ const CommentNovel = (props) => {
               paddingVertical: 8,
               borderRadius: 20,
             }}
+            onPress={sendCommend}
           >
             <Text style={{ color: "#f4f4f4" }}>Send</Text>
           </TouchableOpacity>

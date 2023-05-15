@@ -8,7 +8,7 @@ const VerNovelItem = (props) => {
         props.navigation.navigate("Intro", {id: props.data.id, type: props.data.type});
     }
   return (
-        <TouchableOpacity key={props.index} onPress={handler} style={{marginBottom: 15, marginRight: 20}}>
+        <TouchableOpacity key={props.index} onPress={handler} style={{marginBottom: 0, marginRight: 20}}>
             <ImageBackground source={{ uri: `data:image/jpeg;base64,${props.data.image}` }} style={styles.item} imageStyle={{ borderRadius: 20}} >
             </ImageBackground>
             <View style={styles.content}>

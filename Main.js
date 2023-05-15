@@ -17,7 +17,7 @@ import RegisterPage from "./src/pages/RegisterPage";
 import background from "./src/images/background2.jpg";
 import UserContext from "./src/contexts/Context";
 import { getToken, removeToken, storeToken } from "./src/Auth/AuthToken";
-import { useNavigation } from "@react-navigation/native";
+import ProfilePage from "./src/pages/ProfilePage";
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -33,7 +33,6 @@ const Main = () => {
     }
     // BackHandler.exitApp();
   };
-
   React.useEffect(() => {
     getToken()
       .then((result) => {
@@ -122,6 +121,19 @@ const Main = () => {
           name="Novels"
           component={NovelsPage}
         />
+        {state.isLogged &&
+          <Drawer.Screen
+            options={{
+              headerTitle: "Profile",
+              // headerTitleStyle: { marginTop: 10, color: "#696969" },
+              headerStyle: {
+                backgroundColor: "#fff",
+              },
+            }}
+            name="Profile"
+            component={ProfilePage}
+          />
+        }
         {!state.isLogged && (
           <>
             <Drawer.Screen
@@ -131,7 +143,7 @@ const Main = () => {
                 headerTitleStyle: { marginTop: 10, color: "#696969" },
               }}
               name="Login"
-              component={LoginPage}
+              component={LoginPage} //login
             />
             <Drawer.Screen
               options={{

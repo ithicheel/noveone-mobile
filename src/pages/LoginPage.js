@@ -175,6 +175,9 @@ const LoginPage = (props) => {
           </Text>
         </View>
       </View>
+      <View>
+        <Text></Text>
+      </View>
     </View>
   );
 };

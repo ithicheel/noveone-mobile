@@ -26,6 +26,7 @@ const HomePage = ({ navigation }) => {
   const [cateData, setCateData] = useState([]);
   const [data, setData] = useState([]);
   const [filterData, setFilterData] = useState([]);
+  const [novelData, setNovelData] = useState([]);
 
   const selectedType = (item) => {
     let filter = data.filter((el) =>
@@ -90,6 +91,11 @@ const HomePage = ({ navigation }) => {
       .catch((error) => {
         console.log(error);
       });
+    axios.get("/novel").then((result) => {
+      if(result.data){
+        setNovelData(result.data.data);
+      }
+    }) 
   }, []);
 
   return (
@@ -108,21 +114,22 @@ const HomePage = ({ navigation }) => {
       </View>
       <View>
         <View style={{ marginHorizontal: 10 }}>
-          <FlatList
+          {/* <FlatList
             data={defaultCate}
             renderItem={popRenderItem}
             keyExtractor={(item) => item.id}
             extraData={popSelectedId}
             horizontal
             showsHorizontalScrollIndicator={false}
-          />
+          /> */}
+          <Text style={{ marginHorizontal: 10, fontSize: 16, fontWeight: 'bold'}} >Novels</Text>
         </View>
         <ScrollView
           showsHorizontalScrollIndicator={false}
           horizontal
           style={{ marginBottom: 0, marginHorizontal: 10 }}
         >
-          {data.map((el, ind) => {
+          {novelData.map((el, ind) => {
             return (
               <VerNovelItem
                 key={ind}

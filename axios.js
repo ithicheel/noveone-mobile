@@ -4,7 +4,7 @@ import axios from "axios";
 const instance = axios.create({
   withCredentials: true,
   // baseURL: "https://project-backend1.herokuapp.com/api/v1",
-  baseURL: "http://192.168.1.117:3001/api/v1",
+  baseURL: "http://10.3.202.99:3001/api/v1",
   // baseURL: "http://10.3.201.135:3001/api/v1",
     // baseURL: "http://localhost:3001/api/v1",
   headers: {

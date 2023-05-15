@@ -10,13 +10,40 @@ import {
   Keyboard,
   Platform,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import login from "../images/login.png";
 import lock from "../images/padlock.png";
 import email from "../images/email.png";
 import user from "../images/user.png";
 
 const RegisterPage = (props) => {
+  const [username, setUsername] = useState("");
+  const [mail, setmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [repassword, setRepassword] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+  const registerHandler = () => {
+    if(username.length === 0 || mail.length === 0 || password.length === 0 || repassword.length === 0){
+      setAlertMessage("Талбараа бөглөнө үү?");
+      return;
+    }
+    if(password !== repassword){
+      setAlertMessage("Нууц үг зөрүүтэй байна?");
+      return;
+    } 
+  }
+  const handlerUsername = (e) =>{
+    setUsername(e)
+  }
+  const handlerMail = (e) =>{
+    setmail(e)
+  }
+  const handlerPassword = (e) =>{
+    setPassword(e)
+  }
+  const handlerRepassword = (e) =>{
+    setRepassword(e)
+  }
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -67,6 +94,8 @@ const RegisterPage = (props) => {
                   style={{ height: 18, width: 18, marginRight: 10 }}
                 />
                 <TextInput
+                  value={username}
+                  onChangeText={handlerUsername}
                   style={{ fontSize: 18, width: 240 }}
                   placeholder="Username"
                 />
@@ -87,6 +116,8 @@ const RegisterPage = (props) => {
                   style={{ height: 20, width: 20, marginRight: 10 }}
                 />
                 <TextInput
+                  value={mail}
+                  onChangeText={handlerMail}
                   style={{ fontSize: 18, width: 240 }}
                   placeholder="Email"
                 />
@@ -108,6 +139,8 @@ const RegisterPage = (props) => {
                 />
                 <TextInput
                   secureTextEntry={true}
+                  onChangeText={handlerPassword}
+                  value={password}
                   style={{ fontSize: 18, width: 240 }}
                   placeholder="Password"
                 />
@@ -128,17 +161,20 @@ const RegisterPage = (props) => {
                   style={{ height: 20, width: 20, marginRight: 10 }}
                 />
                 <TextInput
+                  onChangeText={handlerRepassword}
+                  value={repassword}
                   secureTextEntry={true}
                   style={{ fontSize: 18, width: 240 }}
                   placeholder="Re-password"
                 />
               </View>
               <Text
-                style={{ marginBottom: 15, color: "#696969", marginLeft: 100 }}
+                style={{ marginBottom: 0, color: "#696969", marginLeft: 100 }}
               >
                 Үйлчилгээний нөхцөл харах
               </Text>
-              <TouchableOpacity>
+              <Text style={{color: "red", marginVertical: 10}} >{alertMessage}</Text>
+              <TouchableOpacity onPress={registerHandler}>
                 <Text
                   style={{
                     backgroundColor: "#354052",
